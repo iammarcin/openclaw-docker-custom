@@ -1,0 +1,67 @@
+services:
+  openclaw:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      secrets:
+        - github_token
+    image: openclaw-prod:local
+    container_name: openclaw-prod
+    entrypoint: ["/bin/bash", "/start.sh"]
+    ports:
+      - "${OPENCLAW_PORT:-18789}:18789"
+    volumes:
+      - ${OPENCLAW_CONFIG_DIR:-./data/config}:/home/node/.openclaw
+      - ${OPENCLAW_WORKSPACE_DIR:-./data/workspace}:/home/node/.openclaw/workspace
+      - ${CLAUDE_CREDENTIALS_DIR:-./data/claude}:/home/node/.claude
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN}
+      - ANTHROPIC_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN}
+    networks:
+      - betterai-network
+    restart: unless-stopped
+
+  openclaw-cli:
+    image: openclaw-prod:local
+    volumes:
+      - ${OPENCLAW_CONFIG_DIR:-./data/config}:/home/node/.openclaw
+      - ${OPENCLAW_WORKSPACE_DIR:-./data/workspace}:/home/node/.openclaw/workspace
+      - ${CLAUDE_CREDENTIALS_DIR:-./data/claude}:/home/node/.claude
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - HOME=/home/node
+      - BROWSER=echo
+      - TERM=xterm-256color
+    working_dir: /app
+    entrypoint: ["node", "openclaw.mjs"]
+    user: "node"
+    init: true
+    stdin_open: true
+    tty: true
+    profiles:
+      - cli
+
+  claude-auth:
+    image: openclaw-prod:local
+    volumes:
+      - ${CLAUDE_CREDENTIALS_DIR:-./data/claude}:/home/node/.claude
+    environment:
+      - HOME=/home/node
+      - TERM=xterm-256color
+    entrypoint: ["claude", "setup-token"]
+    user: "node"
+    init: true
+    stdin_open: true
+    tty: true
+    profiles:
+      - auth
+
+networks:
+  betterai-network:
+    external: true
+    name: betterai-network
+
+secrets:
+  github_token:
+    environment: GITHUB_TOKEN

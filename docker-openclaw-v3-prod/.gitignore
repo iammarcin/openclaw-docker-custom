@@ -1,0 +1,3 @@
+# Sensitive runtime data (tokens, device keys, credentials)
+data/config/
+data/claude/

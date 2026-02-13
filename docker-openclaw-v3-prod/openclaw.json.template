@@ -1,0 +1,54 @@
+{
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "agents": {
+    "engine": "claude-cli",
+    "defaults": {
+      "model": {
+        "primary": "anthropic/claude-sonnet-4-5"
+      },
+      "maxConcurrent": 2,
+      "subagents": {
+        "maxConcurrent": 4
+      },
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "workspace": "/home/node/.openclaw/workspace",
+      "timeoutSeconds": 600,
+      "sandbox": {
+        "mode": "off"
+      }
+    },
+    "list": [
+      {
+        "id": "sherlock",
+        "default": true,
+        "model": {
+          "primary": "anthropic/claude-sonnet-4-5"
+        },
+        "workspace": "/home/node/.openclaw/workspace",
+        "sandbox": {
+          "mode": "off"
+        }
+      }
+    ]
+  },
+  "gateway": {
+    "mode": "local",
+    "auth": {
+      "mode": "token",
+      "token": "REPLACE_WITH_GENERATED_TOKEN"
+    },
+    "port": 18789,
+    "bind": "lan",
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "remote": {
+      "token": "REPLACE_WITH_GENERATED_TOKEN"
+    }
+  }
+}
