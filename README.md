@@ -55,7 +55,7 @@ This repository packages OpenClaw into a lean, self-contained Docker deployment 
 
 - Docker and Docker Compose
 - An external Docker network: `docker network create betterai-network`
-- Anthropic API key **or** Claude Code subscription credentials
+- Anthropic API key
 
 ### 1. Configure environment
 
@@ -64,7 +64,7 @@ cd docker-openclaw-v3-prod
 cp .env .env.local   # edit as needed
 ```
 
-Set `ANTHROPIC_API_KEY` in `.env` for API key auth, or leave it empty and use Claude Code subscription auth (Step 3).
+Set `ANTHROPIC_API_KEY` in `.env` for API key auth
 
 ### 2. Build and start
 
@@ -81,15 +81,7 @@ docker logs openclaw-prod
 
 You should see the startup banner with the gateway token and Web UI URL.
 
-### 3. (Optional) Authenticate Claude Code subscription
-
-If using a Claude subscription instead of an API key:
-
-```bash
-docker compose run --rm claude-auth
-```
-
-### 4. Verify
+### 3. Verify
 
 ```bash
 # Open the web UI
@@ -125,6 +117,3 @@ docker-openclaw-v3-prod/
 - **pnpm / Bun** — package management and build tooling
 - **Bash** — entrypoint scripting with automatic provisioning
 
-## Related Repository
-
-- [openclaw-custom-claude-sdk](https://github.com/iammarcin/openclaw-custom-claude-sdk) — the custom Claude Agent SDK modules injected at build time (agent engine, thinking state machine, streaming parser)
